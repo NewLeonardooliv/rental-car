@@ -63,4 +63,12 @@ describe('VehicleController', () => {
       expect(service.save).toHaveBeenCalledWith('1', dto);
     });
   });
+
+  describe('delete', () => {
+    it('should delete and return the confirmation', async () => {
+      const dto = { deleted: true };
+      const result = await controller.delete('1');
+      expect(result).toEqual({ deleted: true });
+    });
+  });
 });
