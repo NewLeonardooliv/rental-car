@@ -7,10 +7,12 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
 import { VehicleService } from './vehicle.service';
+import { Vehicle as VehiclePersistence } from '@prisma/client';
 
 @Controller('vehicle')
 export class VehicleController {
@@ -18,25 +20,31 @@ export class VehicleController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async list() {
-    return await this.vehicleService.list();
+  async list(
+    @Query('ative') active?: boolean,
+    @Query('rented') rented?: boolean,
+  ): Promise<VehiclePersistence[]> {
+    return await this.vehicleService.list(active, rented);
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  async find(@Param('id') id: string) {
+  async find(@Param('id') id: string): Promise<VehiclePersistence> {
     return await this.vehicleService.find(id);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createVehicleDto: CreateVehicleDto) {
+  async create(@Body() createVehicleDto: CreateVehicleDto): Promise<VehiclePersistence> {
     return await this.vehicleService.create(createVehicleDto);
   }
 
   @Patch(':id')
   @HttpCode(HttpStatus.ACCEPTED)
-  async update(@Param('id') id: string, @Body() updateVehicleDto: UpdateVehicleDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateVehicleDto: UpdateVehicleDto
+  ): Promise<VehiclePersistence> {
     return await this.vehicleService.save(id, updateVehicleDto);
   }
 }

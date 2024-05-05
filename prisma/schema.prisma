@@ -19,6 +19,8 @@ model Vehicle {
   model        String
   year         Int
   licensePlate String   @unique @map("license_plate")
+  isActive     Boolean  @default(true) @map("is_active")
+  isRented     Boolean  @default(false) @map("is_rented")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
 
