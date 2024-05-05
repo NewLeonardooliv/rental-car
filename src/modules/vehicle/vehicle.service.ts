@@ -17,13 +17,40 @@ export class VehicleService {
   }
 
   async save(id: string, updateVehicleDto: UpdateVehicleDto): Promise<VehiclePersistence> {
+    if (!await this.find(id)) {
+      throw new NotFoundException();
+    }
+
     return await this.database.vehicle.update({
       data: updateVehicleDto,
       where: { id }
     });
   }
 
-  async find(id: string): Promise<VehiclePersistence> {
+  async inativate(id: string): Promise<boolean> {
+    if (!await this.find(id)) {
+      throw new NotFoundException();
+    }
+
+    const vehicle = await this.database.vehicle.update({
+      data: {
+        isActive: false
+      },
+      where: { id }
+    });
+
+    if (!vehicle) {
+      throw new NotFoundException();
+    }
+
+    return true;
+  }
+
+  async find(id: string) {
+    return await this.database.vehicle.findFirst({ where: { id } });
+  }
+
+  async findOne(id: string): Promise<VehiclePersistence> {
     const vehicle = await this.database.vehicle.findFirst({
       where: { id }
     });
@@ -36,13 +63,16 @@ export class VehicleService {
   }
 
   async list(
-    active?: boolean,
-    rented?: boolean
+    active?: string,
+    rented?: string
   ): Promise<VehiclePersistence[]> {
+    const isActive = active ? active === 'true' : true;
+    const isRented = rented ? rented === 'true' : false;
+
     return await this.database.vehicle.findMany({
       where: {
-        isActive: active ?? true,
-        isRented: rented ?? false
+        isActive,
+        isRented
       }
     });
   }

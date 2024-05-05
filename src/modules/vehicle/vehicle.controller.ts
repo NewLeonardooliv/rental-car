@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -21,8 +22,8 @@ export class VehicleController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async list(
-    @Query('ative') active?: boolean,
-    @Query('rented') rented?: boolean,
+    @Query('active') active?: string,
+    @Query('rented') rented?: string,
   ): Promise<VehiclePersistence[]> {
     return await this.vehicleService.list(active, rented);
   }
@@ -30,7 +31,7 @@ export class VehicleController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async find(@Param('id') id: string): Promise<VehiclePersistence> {
-    return await this.vehicleService.find(id);
+    return await this.vehicleService.findOne(id);
   }
 
   @Post()
@@ -46,5 +47,15 @@ export class VehicleController {
     @Body() updateVehicleDto: UpdateVehicleDto
   ): Promise<VehiclePersistence> {
     return await this.vehicleService.save(id, updateVehicleDto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.ACCEPTED)
+  async delete(
+    @Param('id') id: string,
+  ): Promise<{ deleted: boolean }> {
+    const isDeleted = await this.vehicleService.inativate(id);
+
+    return { deleted: isDeleted }
   }
 }

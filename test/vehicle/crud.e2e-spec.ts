@@ -15,9 +15,10 @@ describe('VehicleController (e2e)', () => {
       .overrideProvider(VehicleService)
       .useValue({
         list: jest.fn().mockResolvedValue([{ id: '1', make: 'Toyota', model: 'Corolla', year: 2022 }]),
-        find: jest.fn().mockResolvedValue({ id: '1', make: 'Toyota', model: 'Corolla', year: 2022 }),
+        findOne: jest.fn().mockResolvedValue({ id: '1', make: 'Toyota', model: 'Corolla', year: 2022 }),
         create: jest.fn().mockResolvedValue({ id: '1', make: 'Toyota', model: 'Corolla', year: 2022 }),
         save: jest.fn().mockResolvedValue({ id: '1', make: 'Toyota', model: 'Corolla', year: 2023 }),
+        inativate: jest.fn().mockResolvedValue(true),
       })
       .compile();
 
@@ -54,5 +55,12 @@ describe('VehicleController (e2e)', () => {
       .send({ year: 2023 })
       .expect(HttpStatus.ACCEPTED)
       .expect({ id: '1', make: 'Toyota', model: 'Corolla', year: 2023 });
+  });
+
+  it('/vehicle/:id (DELETE)', () => {
+    return request(app.getHttpServer())
+      .delete('/vehicle/1')
+      .expect(HttpStatus.ACCEPTED)
+      .expect({ deleted: true });
   });
 });
