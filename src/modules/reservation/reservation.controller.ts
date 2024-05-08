@@ -1,16 +1,23 @@
 import {
     Body,
     Controller,
-    Delete,
-    Get,
     HttpCode,
     HttpStatus,
-    Param,
-    Patch,
     Post,
-    Query,
   } from '@nestjs/common';
-import { createReservationDto } from './dto/create-reservation.dto';
-import { UpdatereservationDto } from './dto/update-reservation.dto';
-import { reservationService } from './reservation.service';
-import { reservation as reservationPersistence } from '@prisma/client';
+import { CreateReservationDto } from './dto/create-reservation.dto';
+import { ReservationService } from './reservation.service';
+import { Reservation as ReservationPersistence } from '@prisma/client';
+
+@Controller('reservation')
+export class ReservationController {
+  constructor(private readonly reservationService: ReservationService) {}
+
+  @Post()
+  @HttpCode(HttpStatus.OK)
+  async list(
+    @Body() createReservationDto: CreateReservationDto
+  ): Promise<ReservationPersistence> {
+    return await this.reservationService.create(createReservationDto);
+  }
+}

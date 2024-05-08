@@ -1,7 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../service/database/prisma.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
-import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { Reservation as ReservationPersistence } from '@prisma/client';
 
 @Injectable()
@@ -11,68 +10,31 @@ export class ReservationService {
   ) { }
 
   async create(createReservationDto: CreateReservationDto): Promise<ReservationPersistence> {
-    return await this.database.reservation.create({
-      data: createReservationDto
-    });
-  }
-
-  async save(id: string, updateReservationDto: UpdateReservationDto): Promise<ReservationPersistence> {
-    if (!await this.find(id)) {
-      throw new NotFoundException();
-    }
-
-    return await this.database.Reservation.update({
-      data: updateReservationDto,
-      where: { id }
-    });
-  }
-
-  async inativate(id: string): Promise<boolean> {
-    if (!await this.find(id)) {
-      throw new NotFoundException();
-    }
-
-    const reservation = await this.database.reservation.update({
-      data: {
-        isActive: false
-      },
-      where: { id }
-    });
-
-    if (!reservation) {
-      throw new NotFoundException();
-    }
-
-    return true;
-  }
-
-  async find(id: string) {
-    return await this.database.reservation.findFirst({ where: { id } });
-  }
-
-  async findOne(id: string): Promise<reservationPersistence> {
-    const reservation = await this.database.reservation.findFirst({
-      where: { id }
-    });
-
-    if (!reservation) {
-      throw new NotFoundException();
-    }
-
-    return reservation;
-  }
-
-  async list(
-    active?: string,
-    rented?: string
-  ): Promise<reservationPersistence[]> {
-    const isActive = active ? active === 'true' : true;
-    const isRented = rented ? rented === 'true' : false;
-
-    return await this.database.reservation.findMany({
+    const isReserved = await this.database.reservation.findFirst({
       where: {
-        isActive,
-        isRented
+        vehicleId: createReservationDto.vehicleId,
+        OR: [{          
+          endDate: {
+            lte: new Date(createReservationDto.endDate),
+            gte: new Date(createReservationDto.initialDate)
+          },
+          initialDate: {
+            lte: new Date(createReservationDto.endDate),
+            gte: new Date(createReservationDto.initialDate)
+          }
+        }]
+      }
+    })
+
+    if (!!isReserved) {
+      throw new BadRequestException('Data já reservada para esse veiculo.');
+    }
+
+    return await this.database.reservation.create({
+      data: {
+        ...createReservationDto,
+        initialDate: new Date(createReservationDto.initialDate),
+        endDate: new Date(createReservationDto.endDate)
       }
     });
   }
