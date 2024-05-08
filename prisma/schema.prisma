@@ -14,15 +14,27 @@ datasource db {
 }
 
 model Vehicle {
-  id           String   @id @default(uuid())
+  id           String        @id @default(uuid())
   brand        String
   model        String
   year         Int
-  licensePlate String   @unique @map("license_plate")
-  isActive     Boolean  @default(true) @map("is_active")
-  isRented     Boolean  @default(false) @map("is_rented")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+  licensePlate String        @unique @map("license_plate")
+  isActive     Boolean       @default(true) @map("is_active")
+  isRented     Boolean       @default(false) @map("is_rented")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at")
+  Reservation  Reservation[]
 
   @@map("vehicle")
+}
+
+model Reservation {
+  id          String   @id @default(uuid())
+  price       Float
+  initialDate DateTime
+  endDate     DateTime
+  vehicle     Vehicle  @relation(fields: [vehicleId], references: [id])
+  vehicleId   String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 }
