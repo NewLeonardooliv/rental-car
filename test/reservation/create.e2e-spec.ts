@@ -36,7 +36,7 @@ describe('ReservationController (e2e)', () => {
         initialDate: "2024-05-09",
         endDate: "2024-05-10"
       })
-      .expect(HttpStatus.OK)
+      .expect(HttpStatus.CREATED)
       .expect({
         vehicleId: "1",
         price: 200,

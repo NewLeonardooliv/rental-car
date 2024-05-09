@@ -14,7 +14,7 @@ export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
 
   @Post()
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   async create(
     @Body() createReservationDto: CreateReservationDto
   ): Promise<ReservationPersistence> {
