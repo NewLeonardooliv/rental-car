@@ -15,7 +15,7 @@ export class ReservationController {
 
   @Post()
   @HttpCode(HttpStatus.OK)
-  async list(
+  async create(
     @Body() createReservationDto: CreateReservationDto
   ): Promise<ReservationPersistence> {
     return await this.reservationService.create(createReservationDto);

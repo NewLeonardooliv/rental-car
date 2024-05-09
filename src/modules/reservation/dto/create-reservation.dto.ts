@@ -10,7 +10,7 @@ const reservationCreateSchema = z.object({
 
 export class CreateReservationDto extends createZodDto(reservationCreateSchema) {
     readonly vehicleId: string;
-    readonly price  : number;
     readonly initialDate: string;
+    readonly price  : number;
     readonly endDate: string;
 }
