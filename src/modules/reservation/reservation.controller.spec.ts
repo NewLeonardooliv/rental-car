@@ -31,7 +31,7 @@ describe('ReservationController', () => {
             it('should create and return the vehicle', async () => {
                 const dto: CreateReservationDto = {vehicleId: 'vehicleId', initialDate: 'initialDate', price: 150, endDate: 'endDate' };
                 const result = await controller.create(dto);
-                expect(result).toEqual({ });
+                expect(result).toEqual({vehicleId: 'vehicleId', initialDate: 'initialDate', price: 150,endDate: 'endDate'});
                 expect(service.create).toHaveBeenCalledWith(dto);
             });
     });
