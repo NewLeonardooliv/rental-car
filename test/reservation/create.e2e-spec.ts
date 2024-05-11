@@ -9,16 +9,16 @@ describe('ReservationController (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      controllers: [ReservationController], // Include the controller
+      controllers: [ReservationController],
       providers: [ReservationService],
     })
       .overrideProvider(ReservationService)
       .useValue({
         create: jest.fn().mockResolvedValue({
-            vehicleId: "1",
-            price: 200,
-            initialDate: "2024-05-09",
-            endDate: "2024-05-10"
+          vehicleId: '1',
+          price: 200,
+          initialDate: '2024-05-09',
+          endDate: '2024-05-10',
         }),
       })
       .compile();
@@ -30,22 +30,22 @@ describe('ReservationController (e2e)', () => {
   it('/reservation (POST)', async () => {
     return request(app.getHttpServer())
       .post('/reservation')
-      .send({ 
-        vehicleId: "1",
+      .send({
+        vehicleId: '1',
         price: 200,
-        initialDate: "2024-05-09",
-        endDate: "2024-05-10"
+        initialDate: '2024-05-09',
+        endDate: '2024-05-10',
       })
       .expect(HttpStatus.CREATED)
       .expect({
-        vehicleId: "1",
+        vehicleId: '1',
         price: 200,
-        initialDate: "2024-05-09",
-        endDate: "2024-05-10"
+        initialDate: '2024-05-09',
+        endDate: '2024-05-10',
       });
   });
 
   afterAll(async () => {
-    await app.close(); 
+    await app.close();
   });
 });

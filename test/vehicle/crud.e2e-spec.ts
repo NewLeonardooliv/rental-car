@@ -14,10 +14,29 @@ describe('VehicleController (e2e)', () => {
     })
       .overrideProvider(VehicleService)
       .useValue({
-        list: jest.fn().mockResolvedValue([{ id: '1', make: 'Toyota', model: 'Corolla', year: 2022 }]),
-        findOne: jest.fn().mockResolvedValue({ id: '1', make: 'Toyota', model: 'Corolla', year: 2022 }),
-        create: jest.fn().mockResolvedValue({ id: '1', make: 'Toyota', model: 'Corolla', year: 2022 }),
-        save: jest.fn().mockResolvedValue({ id: '1', make: 'Toyota', model: 'Corolla', year: 2023 }),
+        list: jest
+          .fn()
+          .mockResolvedValue([
+            { id: '1', make: 'Toyota', model: 'Corolla', year: 2022 },
+          ]),
+        findOne: jest.fn().mockResolvedValue({
+          id: '1',
+          make: 'Toyota',
+          model: 'Corolla',
+          year: 2022,
+        }),
+        create: jest.fn().mockResolvedValue({
+          id: '1',
+          make: 'Toyota',
+          model: 'Corolla',
+          year: 2022,
+        }),
+        save: jest.fn().mockResolvedValue({
+          id: '1',
+          make: 'Toyota',
+          model: 'Corolla',
+          year: 2023,
+        }),
         inativate: jest.fn().mockResolvedValue(true),
       })
       .compile();

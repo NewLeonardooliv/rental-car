@@ -4,8 +4,8 @@ import { z } from 'zod';
 
 const reservationCreateSchema = z.object({
   vehicleId: z.string().uuid(),
-  initialDate: z.string(),
-  endDate: z.string(),
+  initialDate: z.string().date(),
+  endDate: z.string().date(),
   paymentMethod: z.enum(['credit', 'debit', 'boleto']),
 });
 
