@@ -6,6 +6,8 @@ import { PaymentType } from 'src/types/payment.type';
 export class PaymentService {
   constructor() {}
 
+  static PRICE: number = 150.0;
+
   calculate(dto: CreateReservationDto) {
     const startDate = new Date(dto.initialDate);
     const endDate = new Date(dto.endDate);
@@ -15,10 +17,10 @@ export class PaymentService {
     const days = difference / (1000 * 3600 * 24);
 
     if (days <= 0) {
-      return 150;
+      return PaymentService.PRICE;
     }
 
-    return days * 150;
+    return days * PaymentService.PRICE;
   }
 
   processPayment(amount: number, method: PaymentType) {

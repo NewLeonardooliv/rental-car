@@ -32,7 +32,7 @@ describe('PaymentService', () => {
 
       const totalCost = paymentService.calculate(dto);
 
-      expect(totalCost).toBe(150);
+      expect(totalCost).toBe(PaymentService.PRICE);
     });
   });
 
