@@ -64,7 +64,7 @@ export class ReservationService {
     });
 
     if (!!isReserved) {
-      throw new BadRequestException('Data já reservada para esse veiculo.');
+      throw new BadRequestException('Date already booked for this vehicle.');
     }
 
     const { paymentMethod, ...restOfDto } = createReservationDto;
