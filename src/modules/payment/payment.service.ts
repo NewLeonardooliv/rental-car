@@ -14,6 +14,10 @@ export class PaymentService {
 
     const days = difference / (1000 * 3600 * 24);
 
+    if (days <= 0) {
+      return 150;
+    }
+
     return days * 150;
   }
 
