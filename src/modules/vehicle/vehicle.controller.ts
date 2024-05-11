@@ -17,7 +17,7 @@ import { Vehicle as VehiclePersistence } from '@prisma/client';
 
 @Controller('vehicle')
 export class VehicleController {
-  constructor(private readonly vehicleService: VehicleService) { }
+  constructor(private readonly vehicleService: VehicleService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -36,7 +36,9 @@ export class VehicleController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createVehicleDto: CreateVehicleDto): Promise<VehiclePersistence> {
+  async create(
+    @Body() createVehicleDto: CreateVehicleDto,
+  ): Promise<VehiclePersistence> {
     return await this.vehicleService.create(createVehicleDto);
   }
 
@@ -44,18 +46,16 @@ export class VehicleController {
   @HttpCode(HttpStatus.ACCEPTED)
   async update(
     @Param('id') id: string,
-    @Body() updateVehicleDto: UpdateVehicleDto
+    @Body() updateVehicleDto: UpdateVehicleDto,
   ): Promise<VehiclePersistence> {
     return await this.vehicleService.save(id, updateVehicleDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.ACCEPTED)
-  async delete(
-    @Param('id') id: string,
-  ): Promise<{ deleted: boolean }> {
+  async delete(@Param('id') id: string): Promise<{ deleted: boolean }> {
     const isDeleted = await this.vehicleService.inativate(id);
 
-    return { deleted: isDeleted }
+    return { deleted: isDeleted };
   }
 }

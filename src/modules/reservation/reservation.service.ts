@@ -1,30 +1,48 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../service/database/prisma.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { Reservation as ReservationPersistence } from '@prisma/client';
 
 @Injectable()
 export class ReservationService {
-  constructor(
-    private readonly database: PrismaService,
-  ) { }
+  constructor(private readonly database: PrismaService) {}
 
-  async create(createReservationDto: CreateReservationDto): Promise<ReservationPersistence> {
+  async find(id: string): Promise<ReservationPersistence> {
+    const reservation = await this.database.reservation.findFirst({
+      where: { id },
+    });
+
+    if (!reservation) {
+      throw new NotFoundException();
+    }
+
+    return reservation;
+  }
+
+  async create(
+    createReservationDto: CreateReservationDto,
+  ): Promise<ReservationPersistence> {
     const isReserved = await this.database.reservation.findFirst({
       where: {
         vehicleId: createReservationDto.vehicleId,
-        OR: [{          
-          endDate: {
-            lte: new Date(createReservationDto.endDate),
-            gte: new Date(createReservationDto.initialDate)
+        OR: [
+          {
+            endDate: {
+              lte: new Date(createReservationDto.endDate),
+              gte: new Date(createReservationDto.initialDate),
+            },
+            initialDate: {
+              lte: new Date(createReservationDto.endDate),
+              gte: new Date(createReservationDto.initialDate),
+            },
           },
-          initialDate: {
-            lte: new Date(createReservationDto.endDate),
-            gte: new Date(createReservationDto.initialDate)
-          }
-        }]
-      }
-    })
+        ],
+      },
+    });
 
     if (!!isReserved) {
       throw new BadRequestException('Data já reservada para esse veiculo.');
@@ -34,8 +52,8 @@ export class ReservationService {
       data: {
         ...createReservationDto,
         initialDate: new Date(createReservationDto.initialDate),
-        endDate: new Date(createReservationDto.endDate)
-      }
+        endDate: new Date(createReservationDto.endDate),
+      },
     });
   }
 }

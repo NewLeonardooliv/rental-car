@@ -20,6 +20,12 @@ describe('ReservationController', () => {
               price: 150,
               endDate: 'endDate',
             }),
+            find: jest.fn().mockResolvedValue({
+              vehicleId: '1',
+              initialDate: 'initialDate',
+              price: 450,
+              endDate: 'endDate',
+            }),
           },
         },
       ],
@@ -32,6 +38,20 @@ describe('ReservationController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  describe('find', () => {
+    it('should return a single reservation object', async () => {
+      const result = await controller.find('1');
+      expect(result).toEqual({
+        vehicleId: '1',
+        initialDate: 'initialDate',
+        price: 450,
+        endDate: 'endDate',
+      });
+      expect(service.find).toHaveBeenCalledWith('1');
+    });
+  });
+
   describe('create', () => {
     it('should create and return the vehicle', async () => {
       const dto: CreateReservationDto = {
