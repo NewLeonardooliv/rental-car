@@ -17,7 +17,6 @@ describe('ReservationController', () => {
             create: jest.fn().mockResolvedValue({
               vehicleId: 'vehicleId',
               initialDate: 'initialDate',
-              price: 150,
               endDate: 'endDate',
             }),
             find: jest.fn().mockResolvedValue({
@@ -57,14 +56,13 @@ describe('ReservationController', () => {
       const dto: CreateReservationDto = {
         vehicleId: 'vehicleId',
         initialDate: 'initialDate',
-        price: 150,
         endDate: 'endDate',
+        paymentMethod: 'boleto',
       };
       const result = await controller.create(dto);
       expect(result).toEqual({
         vehicleId: 'vehicleId',
         initialDate: 'initialDate',
-        price: 150,
         endDate: 'endDate',
       });
       expect(service.create).toHaveBeenCalledWith(dto);
