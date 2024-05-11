@@ -24,6 +24,7 @@ export class VehicleService {
         'Vehicle with the specified license plate already exists.',
       );
     }
+
     return await this.database.vehicle.create({
       data: createVehicleDto,
     });
