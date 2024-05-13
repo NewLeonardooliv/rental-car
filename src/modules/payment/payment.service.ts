@@ -3,9 +3,9 @@ import { PaymentType } from 'src/types/payment.type';
 
 @Injectable()
 export class PaymentService {
-  constructor() {}
-
   static PRICE: number = 150.0;
+
+  constructor() {}
 
   calculate(startDate: Date, endDate: Date): number {
     const difference = endDate.getTime() - startDate.getTime();
