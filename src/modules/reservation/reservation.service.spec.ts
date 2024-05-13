@@ -105,7 +105,10 @@ describe('ReservationService', () => {
       const reservation = await service.create(mockCreateDto);
 
       expect(reservation).toEqual(mockCreatedReservation);
-      expect(payment.calculate).toHaveBeenCalledWith(mockCreateDto);
+      expect(payment.calculate).toHaveBeenCalledWith(
+        new Date(mockCreateDto.initialDate),
+        new Date(mockCreateDto.endDate),
+      );
       expect(payment.processPayment).toHaveBeenCalledWith(450, 'credit');
       expect(prisma.reservation.create).toHaveBeenCalledWith({
         data: {

@@ -10,27 +10,19 @@ describe('PaymentService', () => {
 
   describe('calculate', () => {
     it('should correctly calculate the total cost for a reservation', () => {
-      const dto = {
-        vehicleId: '1234',
-        initialDate: '2024-04-01',
-        endDate: '2024-04-04',
-        paymentMethod: 'credit' as PaymentType,
-      };
-
-      const totalCost = paymentService.calculate(dto);
+      const totalCost = paymentService.calculate(
+        new Date('2024-04-01'),
+        new Date('2024-04-04'),
+      );
 
       expect(totalCost).toBe(450);
     });
 
     it('should handle zero days difference', () => {
-      const dto = {
-        vehicleId: '1234',
-        initialDate: '2024-04-01',
-        endDate: '2024-04-01',
-        paymentMethod: 'credit' as PaymentType,
-      };
-
-      const totalCost = paymentService.calculate(dto);
+      const totalCost = paymentService.calculate(
+        new Date('2024-04-01'),
+        new Date('2024-04-01'),
+      );
 
       expect(totalCost).toBe(PaymentService.PRICE);
     });
@@ -38,15 +30,12 @@ describe('PaymentService', () => {
 
   describe('processPayment', () => {
     it('should process payment correctly', () => {
-      const consoleSpy = jest.spyOn(console, 'log');
       const amount = 450;
       const method = 'credit' as PaymentType;
 
-      paymentService.processPayment(amount, method);
+      const payment = paymentService.processPayment(amount, method);
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        `Processing ${amount} payment via ${method}`,
-      );
+      expect(payment).toBe(`Processing ${amount} payment via ${method}`);
     });
   });
 });

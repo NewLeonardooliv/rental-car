@@ -69,7 +69,7 @@ export class ReservationService {
 
     const { paymentMethod, ...restOfDto } = createReservationDto;
 
-    const price = this.paymentService.calculate(createReservationDto);
+    const price = this.paymentService.calculate(initialDate, endDate);
     this.paymentService.processPayment(price, paymentMethod);
 
     return await this.database.reservation.create({
