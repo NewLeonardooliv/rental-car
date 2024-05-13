@@ -94,10 +94,6 @@ describe('ReservationService', () => {
         mockCreatedReservation,
       );
 
-      (prisma.reservation.create as jest.Mock).mockResolvedValue(
-        mockCreatedReservation,
-      );
-
       (prisma.reservation.findFirst as jest.Mock).mockResolvedValue(null);
 
       (payment.calculate as jest.Mock).mockReturnValue(450);
